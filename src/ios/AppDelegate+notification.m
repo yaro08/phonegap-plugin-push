@@ -190,7 +190,7 @@ NSString *const pushPluginApplicationDidBecomeActiveNotification = @"pushPluginA
        willPresentNotification:(UNNotification *)notification
          withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler
 {
-    NSLog( @"NotificationCenter Handle push from foreground fork" );
+    NSLog( @"NotificationCenter Handle push from foreground" );
     // custom code to handle push while app is in the foreground
     PushPlugin *pushHandler = [self getCommandInstance:@"PushNotification"];
     pushHandler.notificationMessage = notification.request.content.userInfo;
@@ -213,11 +213,14 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     switch ([UIApplication sharedApplication].applicationState) {
         case UIApplicationStateActive:
         {
-            PushPlugin *pushHandler = [self getCommandInstance:@"PushNotification"];
+            /*PushPlugin *pushHandler = [self getCommandInstance:@"PushNotification"];
             pushHandler.notificationMessage = userInfo;
             pushHandler.isInline = NO;
             [pushHandler notificationReceived];
-            completionHandler();
+            completionHandler();*/
+            NSLog(@"coldstart active");
+            self.launchNotification = response.notification.request.content.userInfo;
+            self.coldstart = [NSNumber numberWithBool:YES];
             break;
         }
         case UIApplicationStateInactive:
