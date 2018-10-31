@@ -213,13 +213,18 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     switch ([UIApplication sharedApplication].applicationState) {
         case UIApplicationStateActive:
         {
+            void (^safeHandler)(void) = ^(void){
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    completionHandler();
+                });
+            };
             PushPlugin *pushHandler = [self getCommandInstance:@"PushNotification"];
             pushHandler.notificationMessage = userInfo;
-            pushHandler.isInline = NO;
+            pushHandler.isInline = YES;
             //[pushHandler notificationReceived];
             [pushHandler performSelectorOnMainThread:@selector(notificationReceived) withObject:pushHandler waitUntilDone:NO];
 
-            completionHandler();
+            //completionHandler();
             break;
         }
         case UIApplicationStateInactive:
