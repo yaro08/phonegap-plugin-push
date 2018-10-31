@@ -213,14 +213,14 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     switch ([UIApplication sharedApplication].applicationState) {
         case UIApplicationStateActive:
         {
-            NSLog("state active");
+            NSLog(@"state active");
             PushPlugin *pushHandler = [self getCommandInstance:@"PushNotification"];
             pushHandler.notificationMessage = userInfo;
             pushHandler.isInline = YES;
             //[pushHandler notificationReceived];
             [pushHandler performSelectorOnMainThread:@selector(notificationReceived) withObject:pushHandler waitUntilDone:NO];
 
-            completionHandler(UIBackgroundFetchResultNewData);
+            completionHandler();
             break;
         }
         case UIApplicationStateInactive:

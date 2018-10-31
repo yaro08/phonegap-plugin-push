@@ -456,6 +456,7 @@
 
         [message setObject:additionalData forKey:@"additionalData"];
 
+        NSLog(@"additionalData %@", additionalData);
         // send notification message
         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:message];
         [pluginResult setKeepCallbackAsBool:YES];
