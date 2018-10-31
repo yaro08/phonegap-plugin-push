@@ -213,14 +213,13 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     switch ([UIApplication sharedApplication].applicationState) {
         case UIApplicationStateActive:
         {
-            /*PushPlugin *pushHandler = [self getCommandInstance:@"PushNotification"];
+            PushPlugin *pushHandler = [self getCommandInstance:@"PushNotification"];
             pushHandler.notificationMessage = userInfo;
             pushHandler.isInline = NO;
-            [pushHandler notificationReceived];
-            completionHandler();*/
-            NSLog(@"coldstart active");
-            self.launchNotification = response.notification.request.content.userInfo;
-            self.coldstart = [NSNumber numberWithBool:YES];
+            //[pushHandler notificationReceived];
+            [pushHandler performSelectorOnMainThread:@selector(notificationReceived) withObject:pushHandler waitUntilDone:NO];
+
+            completionHandler();
             break;
         }
         case UIApplicationStateInactive:
