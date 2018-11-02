@@ -213,10 +213,22 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     switch ([UIApplication sharedApplication].applicationState) {
         case UIApplicationStateActive:
         {
-            NSLog(@"state active");
+            NSLog(@"state active inline");
             PushPlugin *pushHandler = [self getCommandInstance:@"PushNotification"];
+            if (pushHandler.handlerObj == nil) {
+                pushHandler.handlerObj = [NSMutableDictionary dictionaryWithCapacity:2];
+            }
+            
+            id notId = [userInfo objectForKey:@"notId"];
+            if (notId != nil) {
+                NSLog(@"Push Plugin notId %@", notId);
+                [pushHandler.handlerObj setObject:safeHandler forKey:notId];
+            } else {
+                NSLog(@"Push Plugin notId handler");
+                [pushHandler.handlerObj setObject:safeHandler forKey:@"handler"];
+            }
             pushHandler.notificationMessage = userInfo;
-            pushHandler.isInline = YES;
+            pushHandler.isInline = NO;
             //[pushHandler notificationReceived];
             [pushHandler performSelectorOnMainThread:@selector(notificationReceived) withObject:pushHandler waitUntilDone:NO];
 
