@@ -79,12 +79,9 @@ NSString *const pushPluginApplicationDidBecomeActiveNotification = @"pushPluginA
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
-    NSLog(@"didReceiveNotification with fetchCompletionHandler");
 
     // app is in the background or inactive, so only call notification callback if this is a silent push
     if (application.applicationState != UIApplicationStateActive) {
-
-        NSLog(@"app in-active");
 
         // do some convoluted logic to find out if this should be a silent push.
         long silent = 0;
@@ -152,8 +149,6 @@ NSString *const pushPluginApplicationDidBecomeActiveNotification = @"pushPluginA
 }
 
 - (void)pushPluginOnApplicationDidBecomeActive:(NSNotification *)notification {
-
-    NSLog(@"active");
     
     NSString *firstLaunchKey = @"firstLaunchKey";
     NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:@"phonegap-plugin-push"];
@@ -213,7 +208,6 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     switch ([UIApplication sharedApplication].applicationState) {
         case UIApplicationStateActive:
         {
-            NSLog(@"state active");
             PushPlugin *pushHandler = [self getCommandInstance:@"PushNotification"];
             pushHandler.notificationMessage = response.notification.request.content.userInfo;
             pushHandler.isInline = NO;
@@ -224,7 +218,6 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         }
         case UIApplicationStateInactive:
         {
-            NSLog(@"coldstart");
             self.launchNotification = response.notification.request.content.userInfo;
             self.coldstart = [NSNumber numberWithBool:YES];
             break;
